@@ -7,10 +7,10 @@ const fs = require('fs');
 
 const existPath = (userPath) => {
     if (fs.existsSync(userPath)){
-        console.log('La ruta existe')
+        console.log('La ruta existe');
         return true;
     } else {
-        console.log('Esta es la validación de existencia, la ruta no existe')
+        console.log('Esta es la validación de existencia, la ruta no existe');
         return false;
     }
 };
@@ -18,7 +18,7 @@ const existPath = (userPath) => {
 // Validar si la ruta es absoluta, sino la transformo en absoluta
 const absolutePath = (userPath) => {
     if(pathModules.isAbsolute(userPath)) {
-        return userPath
+        return userPath;
     } else {
         return pathModules.resolve(userPath);
     }
@@ -26,4 +26,4 @@ const absolutePath = (userPath) => {
 
 module.exports = {
     existPath,absolutePath
-}
+};

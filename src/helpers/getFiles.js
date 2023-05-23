@@ -1,85 +1,76 @@
 const fs = require('fs');
-// const path = require('path');
-// const process = require('process');
+const path = require('path');
 const { marked } = require('marked');
-// const absPath = process.argv[2];
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
-const arrayPrueba = [
-    'C:/Users/famil/DEV005-md-links/src/prueba/prueba.md',
-    'C:/Users/famil/DEV005-md-links/src/prueba/pruebita/pruebita.md',
-    'C:/Users/famil/DEV005-md-links/src/prueba/pruebita/lapruebadelapruebita/lapruebadelapruebita.md'
-];
+const getFiles = (dirPath) => {
+  let arrayFiles = [];
+  const route = fs.lstatSync(dirPath);
 
-// const getFiles = (absPath) => {
-//     let arrayFiles = [];
-//     let route = fs.lstatSync(absPath);
-
-//     if(route.isFile()) {
-//         arrayFiles.push(absPath);
-//         // console.log('Es un archivo');
-//     } else if(route.isDirectory()) {
-//         let arrayElements = fs.readdirSync(absPath);
-//         arrayElements.forEach((element) => {
-//             const newPath = path.join(absPath, element);
-//             arrayFiles = arrayFiles.concat(getFiles(newPath));
-//         });
-//     } else {
-//         console.log('Inválido');
-//     }
-//      //Probar .filter en el retorno
-//     return arrayFiles = arrayFiles.filter(file => path.extname(file) === '.md');  
-// };
-
-// console.log(getFiles(absPath));
-
-const readFile = (file) => {
-    return new Promise((resolve, reject) => {
-        fs.readFile(file, 'utf-8', (error, data) => {
-            if(error) {
-            reject(error);
-            } else {
-            resolve(data);
-            }
-        });
+  if (route.isFile()) {
+    arrayFiles.push(dirPath);
+  } else if (route.isDirectory()) {
+    const arrayElements = fs.readdirSync(dirPath);
+    arrayElements.forEach((element) => {
+      const newPath = path.join(dirPath, element);
+      arrayFiles = arrayFiles.concat(getFiles(newPath));
     });
+  } else {
+    console.log('Inválido');
+  }
+
+  return arrayFiles.filter((file) => path.extname(file) === '.md');
 };
 
-const getLinks = (data, filePath) => {
-    const htmlContent = marked(data,{
-        headerIds: false,
-        mangle: false,
-    });
 
-    const dom = new JSDOM(htmlContent);
-    let arrayLinks = [];
-    const links = dom.window.document.querySelectorAll('a');  // Salida: Links
-    links.forEach((link) => {
-        arrayLinks.push({
-            href: link.href,
-            text: link.textContent.substring(0,50),
-            file: filePath,
-        });
-        return arrayLinks;
+const mdToHtml = (data) => {
+  const htmlContent = marked(data, {
+    headerIds: false,
+    mangle: false,
+  });
 
-    });
-   
-    console.log(arrayLinks);
-  
-    return htmlContent;
+  const dom = new JSDOM(htmlContent);
+  const links = dom.window.document.querySelectorAll('a');  // Salida: Links
+  return links;
 };
 
-arrayPrueba.forEach((filePath) => {
- readFile(filePath)
-    .then((data) => {
-      return getLinks(data, filePath);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-});
+const getLinks = (links, filePath) => {
 
-// module.exports = {
-//     getFiles
-// }
+  const arrayLinks = [];
+  links.forEach((link) => {
+    const linkObj = {
+      href: link.href,
+      text: link.textContent.substring(0, 50),
+      file: filePath,
+    };
+    arrayLinks.push(linkObj);
+  });
+  return arrayLinks;
+};
+
+
+const readFile = (filePath) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, 'utf-8', (error, data) => {
+      if (error) {
+        reject(error);
+      } else {
+        const convertHtml = mdToHtml(data);
+        const linksFromHtml = getLinks(convertHtml, filePath);        
+        resolve(linksFromHtml);
+      }
+    });
+  });
+};
+
+const readAllMds = (arrayFiles) => {
+  const arrayLinks = arrayFiles.map((file) => {
+    return readFile(file);
+  });
+  return Promise.all(arrayLinks);
+};
+
+module.exports = {
+  getFiles, readAllMds
+};

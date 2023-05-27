@@ -19,7 +19,8 @@
   "dependencies": {
     "jest": "^29.5.0",
     "jsdom": "^22.0.0",
-    "marked": "^5.0.2"
+    "marked": "^5.0.2",
+    "node-fetch": "^2.6.11"
   },
   "devDependencies": {
     "eslint": "^8.41.0"

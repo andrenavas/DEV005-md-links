@@ -3,6 +3,7 @@ const path = require('path');
 const { marked } = require('marked');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
+const fetch = require('node-fetch');
 
 const getFiles = (dirPath) => {
   let arrayFiles = [];
@@ -11,9 +12,9 @@ const getFiles = (dirPath) => {
   if (route.isFile()) {
     arrayFiles.push(dirPath);
   } else if (route.isDirectory()) {
-    const arrayElements = fs.readdirSync(dirPath);
-    arrayElements.forEach((element) => {
-      const newPath = path.join(dirPath, element);
+    const arraylinks = fs.readdirSync(dirPath);
+    arraylinks.forEach((link) => {
+      const newPath = path.join(dirPath, link);
       arrayFiles = arrayFiles.concat(getFiles(newPath));
     });
   } else {
@@ -32,6 +33,7 @@ const mdToHtml = (data) => {
 
   const dom = new JSDOM(htmlContent);
   const links = dom.window.document.querySelectorAll('a');  // Salida: Links
+  // console.log(links);
   return links;
 };
 
@@ -71,6 +73,38 @@ const readAllMds = (arrayFiles) => {
   return Promise.all(arrayLinks);
 };
 
+const validate = (arrayLinks) => {
+  return new Promise((resolve) => {
+    let fetchLinks = arrayLinks.map((link) => {
+      return fetch(link.href)
+        .then((res) => {
+          link.status = res.status;
+          link.statusText = res.statusText;
+        })
+        .catch((err) => {
+          link.status = err;
+        });
+    });
+    Promise.all(fetchLinks).then(() => {
+      resolve(arrayLinks);
+
+    });
+  });
+};
+/**
+   * @params {arrayObjs}
+   * @return { objeto de total, unique, brokens}
+   */
+
+const stats = (arrayLinks) => {
+  let uniqueSet = new Set(arrayLinks.map((link) => link.href)).size;
+  return {
+    Total: arrayLinks.length,
+    Uniques: uniqueSet,
+    Broken: (arrayLinks.filter(element => element.statusText === 'Not Found')).length,
+  };
+};
+
 module.exports = {
-  getFiles, readAllMds
+  getFiles, readAllMds, validate, stats
 };

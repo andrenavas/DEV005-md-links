@@ -2,5 +2,4 @@
 
 ## Tengo que agregar links de prueba
 
-[Markdown](https://es.wikipedia.org/wiki/Markdown) es un lenguaje de marcado
-ligero muy popular entre developers. 
+[Mascoteando](https://mascoteando-andrenavas.vercel.app/error) red social para amantes de las mascotas. 

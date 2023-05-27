@@ -10,7 +10,7 @@ const existPath = (userPath) => {
         console.log('La ruta existe');
         return true;
     } else {
-        console.log('Esta es la validación de existencia, la ruta no existe');
+        console.log('La ruta no existe, ingresa otra ruta');
         return false;
     }
 };

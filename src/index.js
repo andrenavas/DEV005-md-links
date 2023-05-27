@@ -1,33 +1,35 @@
-const { existPath } = require('./path.js');
-const { getFiles, readAllMds } = require('../src/helpers/getFiles.js');
-const process = require('process');
-const userPath = process.argv[2];
+const { existPath, absolutePath } = require('./path.js');
+const { getFiles, readAllMds, validate, stats } = require('../src/helpers/getFiles.js');
 
-
-// Función MD-Links
-const mdLinks = (userPath) => {
+const mdLinks = (userPath, options) => {
+  const route = absolutePath(userPath);
   return new Promise((resolve, reject) => {
     if (!existPath(userPath)) {
       reject(new Error('Error, la ruta no existe'));
+    } else if (options.validate === true && (options.stats === false)) { 
+      const arrayFiles = getFiles(route);
+      readAllMds(arrayFiles)
+      .then((link) => {
+        resolve(validate(link.flat()));
+      });
+    } else if (options.validate === false && (options.stats === true)){
+      const arrayFiles = getFiles(route);
+      readAllMds(arrayFiles)
+      .then((link) => {
+        validate(link.flat()).then((links) => {
+          resolve(stats(links));
+        });    
+      });
     } else { 
-      const arrayFiles = getFiles(userPath);
+      const arrayFiles = getFiles(route);
       readAllMds(arrayFiles)
       .then((res) => {
         resolve(res.flat());
       });
-    }
+      }        
   });
 };
 
-mdLinks(userPath)
-  .then((res) => {
-    console.log('Este es el array de OBJS:', res);
-  })
-  .catch((error) => {
-    console.log(error);
-    // console.log(`Error: ${error}`);
-  });
-  
 module.exports = {
   mdLinks
 };

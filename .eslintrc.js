@@ -10,7 +10,7 @@ module.exports = {
     'parserOptions': {
         ecmaVersion: 12,
     },
-    'ignorePatterns': ['md-links.spec.js',],
+    'ignorePatterns': ['md-links.spec.js', 'getFiles.spec.js'],
     'rules': {
         semi: ['error', 'always'],
         quotes: ['error', 'single'],

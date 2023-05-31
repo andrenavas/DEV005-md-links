@@ -2,7 +2,8 @@ module.exports = {
     'env': {
         'browser': true,
         'commonjs': true,
-        'es2021': true
+        'es2021': true,
+        'jest/globals': true,
     },
     'extends': 'eslint:recommended',
     'overrides': [
@@ -10,7 +11,7 @@ module.exports = {
     'parserOptions': {
         ecmaVersion: 12,
     },
-    'ignorePatterns': ['md-links.spec.js', 'getFiles.spec.js'],
+    // 'ignorePatterns': ['md-links.spec.js', 'getFiles.spec.js'],
     'rules': {
         semi: ['error', 'always'],
         quotes: ['error', 'single'],

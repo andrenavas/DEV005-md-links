@@ -18,10 +18,10 @@ const getFiles = (dirPath) => {
       arrayFiles = arrayFiles.concat(getFiles(newPath));
     });
   } else {
-    console.log('Inválido');
+    console.log('Error, not found');
   }
-
-  return arrayFiles.filter((file) => path.extname(file) === '.md');
+  const arrayMds = arrayFiles.filter((file) => path.extname(file) === '.md');
+  return arrayMds;
 };
 
 
@@ -38,7 +38,6 @@ const mdToHtml = (data) => {
 };
 
 const getLinks = (links, filePath) => {
-
   const arrayLinks = [];
   links.forEach((link) => {
     const linkObj = {
@@ -98,11 +97,12 @@ const validate = (arrayLinks) => {
 
 const stats = (arrayLinks) => {
   let uniqueSet = new Set(arrayLinks.map((link) => link.href)).size;
-  return {
-    Total: arrayLinks.length,
-    Uniques: uniqueSet,
-    Broken: (arrayLinks.filter(element => element.statusText === 'Not Found')).length,
-  };
+  const result = {
+      Total: arrayLinks.length,
+      Unique: uniqueSet,
+      Broken: (arrayLinks.filter(element => element.statusText === 'Not Found')).length,
+    };
+  return result; 
 };
 
 module.exports = {

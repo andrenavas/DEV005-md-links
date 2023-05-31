@@ -10,12 +10,13 @@ describe('mdLinks', () => {
 
   it('Deberia devolver una promesa',() => {
     const path1 = 'src/prueba/prueba.md'
-    expect(mdLinks(path1)).toBeInstanceOf(Promise);
+    const options = { validate: false};
+    expect(mdLinks(path1, options)).toBeInstanceOf(Promise);
   });
 
   it('Deberia rechazar la promesa cuando la ruta no existe', () => {
     return mdLinks('../prueba/archivodeprueba.md').catch((error) => {
-      expect(error.message).toBe('Error, la ruta no existe');
+      expect(error.message).toBe('Error, path does not exist');
     });
   });
 

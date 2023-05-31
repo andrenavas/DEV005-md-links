@@ -1,4 +1,6 @@
 const { mdLinks } = require('./index.js');
+const { stats } = require('./getFiles.js');
+const colors = require('colors');
 const process = require('process');
 const userPath = process.argv[2];
 let optionsObj = {
@@ -7,11 +9,6 @@ let optionsObj = {
 };
 const options = process.argv;
 
-
-//stats con validate
-// retorna ({total, broken y unique})
-// solo stats
-// retorna ({total, uniques})
 
 if( options.includes('--validate') && (!options.includes('--stats'))){
     optionsObj.validate = true;
@@ -27,12 +24,28 @@ if( options.includes('--validate') && (!options.includes('--stats'))){
 
 mdLinks(userPath, optionsObj)
   .then((res) => {
-    console.log('Este es el array de OBJS:', res);
+    if(optionsObj.stats){
+      const statsLink = stats(res);
+      console.log(`Total: ${colors.blue(statsLink.Total)} Unique: ${colors.green(statsLink.Unique)}${statsLink.Broken ? ` Broken: ${colors.red(statsLink.Broken)}` : ''}`);
+    } else if (optionsObj.validate && !optionsObj.stats){
+      res.forEach((element) => {
+        console.log(`URL: ${element.href}`.blue);
+        console.log(`Text: ${element.text}`.magenta);
+        console.log(`File: ${element.file}`.green);
+        console.log(`Status: ${element.status}`.yellow);
+        console.log(`Status Text: ${element.statusText}`.red);
+      })
+      // console.log('Result:', res);
+    } else {
+      res.forEach((element) => {
+        console.log(`URL: ${element.href}`.blue);
+        console.log(`Text: ${element.text}`.magenta);
+        console.log(`File: ${element.file}`.green);
+      })
+    }
   })
   .catch((error) => {
     // console.log(`Error: ${error}`);
     return error;
   });
-
-
   

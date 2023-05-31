@@ -1,24 +1,40 @@
 const { existPath, absolutePath } = require('./path.js');
-const { getFiles, readAllMds, validate, stats } = require('../src/helpers/getFiles.js');
+const { getFiles, readAllMds, validate} = require('../src/getFiles.js');
+const colors = require('colors');
+
+// const mdLinks = (userPath, options) => {
+//   const route = absolutePath(userPath);
+//   return new Promise((resolve, reject) => {
+//     if (!existPath(userPath)) {
+//       reject(new Error('Error, path does not exist'));
+//     } else if (options.validate) { 
+//       const arrayFiles = getFiles(route);
+//       readAllMds(arrayFiles)
+//       .then((link) => {
+//         resolve(validate(link.flat().forEach((element)=> {
+//           return element.href.blue;
+//         })));
+//       });
+//     } else { 
+//       const arrayFiles = getFiles(route);
+//       readAllMds(arrayFiles)
+//       .then((res) => {
+//         resolve(res.flat());
+//       });
+//       }        
+//   });
+// };
 
 const mdLinks = (userPath, options) => {
   const route = absolutePath(userPath);
   return new Promise((resolve, reject) => {
     if (!existPath(userPath)) {
-      reject(new Error('Error, la ruta no existe'));
-    } else if (options.validate === true && (options.stats === false)) { 
+      reject(new Error('Error, path does not exist'));
+    } else if (options.validate) { 
       const arrayFiles = getFiles(route);
       readAllMds(arrayFiles)
       .then((link) => {
         resolve(validate(link.flat()));
-      });
-    } else if (options.validate === false && (options.stats === true)){
-      const arrayFiles = getFiles(route);
-      readAllMds(arrayFiles)
-      .then((link) => {
-        validate(link.flat()).then((links) => {
-          resolve(stats(links));
-        });    
       });
     } else { 
       const arrayFiles = getFiles(route);
@@ -29,6 +45,7 @@ const mdLinks = (userPath, options) => {
       }        
   });
 };
+
 
 module.exports = {
   mdLinks

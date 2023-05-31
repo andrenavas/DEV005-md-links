@@ -7,10 +7,10 @@ const fs = require('fs');
 
 const existPath = (userPath) => {
     if (fs.existsSync(userPath)){
-        console.log('La ruta existe');
+        console.log('Path exist');
         return true;
     } else {
-        console.log('La ruta no existe, ingresa otra ruta');
+        console.log('Path does not exist, please enter another one');
         return false;
     }
 };

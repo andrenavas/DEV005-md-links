@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const { mdLinks } = require('./index.js');
 const { stats } = require('./getFiles.js');
 const colors = require('colors');
@@ -26,7 +27,11 @@ mdLinks(userPath, optionsObj)
   .then((res) => {
     if(optionsObj.stats){
       const statsLink = stats(res);
-      console.log(`Total: ${colors.blue(statsLink.Total)} Unique: ${colors.green(statsLink.Unique)}${statsLink.Broken ? ` Broken: ${colors.red(statsLink.Broken)}` : ''}`);
+      const totalColor = colors.blue(`Total: ${statsLink.Total}`);
+      const uniqueColor = colors.green(`Unique: ${statsLink.Unique}`);
+      const brokenColor = colors.red(`Broken: ${statsLink.Broken}`);
+      console.log(`${totalColor.black} | ${uniqueColor.black} ${statsLink.Broken ? ` | ${brokenColor.black}`  : ''} `);
+      // console.log(`Total: ${colors.blue(statsLink.Total)} Unique: ${colors.green(statsLink.Unique)}${statsLink.Broken ? ` Broken: ${colors.red(statsLink.Broken)}` : ''}`);
     } else if (optionsObj.validate && !optionsObj.stats){
       res.forEach((element) => {
         console.log(`URL: ${element.href}`.blue);
@@ -34,6 +39,7 @@ mdLinks(userPath, optionsObj)
         console.log(`File: ${element.file}`.green);
         console.log(`Status: ${element.status}`.yellow);
         console.log(`Status Text: ${element.statusText}`.red);
+        console.log('');
       })
       // console.log('Result:', res);
     } else {
@@ -41,6 +47,7 @@ mdLinks(userPath, optionsObj)
         console.log(`URL: ${element.href}`.blue);
         console.log(`Text: ${element.text}`.magenta);
         console.log(`File: ${element.file}`.green);
+        console.log('');
       })
     }
   })

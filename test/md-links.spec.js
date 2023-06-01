@@ -8,7 +8,7 @@ describe('mdLinks', () => {
     expect(typeof mdLinks).toBe('function');
   });
 
-  it('Deberia devolver una promesa',() => {
+  it('Deberia devolver una promesa con validate false',() => {
     const path1 = 'src/prueba/prueba.md'
     const options = { validate: false};
     expect(mdLinks(path1, options)).toBeInstanceOf(Promise);
@@ -20,6 +20,11 @@ describe('mdLinks', () => {
     });
   });
 
+  it("Deberia devolver una promesa con validate true", ()=>{
+    const path2 = "src/prueba/prueba.md";
+    const options = { validate: true};
+    expect(mdLinks(path2, options)).toBeInstanceOf(Promise);   
+  });
 });
 
 describe('absolutePath', () => {

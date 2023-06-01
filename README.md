@@ -101,7 +101,7 @@ Lo primero que hice fue organizar las tareas en [GitHub-projects](https://github
 
 ![md-links](./img/diagrama-de-flujo.png)
 
-Con el diagrama de flujo listo, dividí el proyecto en tareas grandes: [Milestones] (https://github.com/andrenavas/DEV005-md-links/milestones) y dentro de ellas tareas más específicas: Issues.
+Con el diagrama de flujo listo, dividí el proyecto en tareas grandes: [Milestones](https://github.com/andrenavas/DEV005-md-links/milestones) y dentro de ellas tareas más específicas: Issues.
 
 ## 7. Checklist
 

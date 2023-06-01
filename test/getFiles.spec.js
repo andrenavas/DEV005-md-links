@@ -1,18 +1,11 @@
-const { readAllMds, getFiles, validate } = require ('../src/getFiles.js');
+const { readAllMds, getFiles, validate, readFile } = require ('../src/getFiles.js');
 
 //FUNCION getFilesMd
 describe('getFilesMd', () => {
   it("Deberia ser una función", () => {
     expect(typeof getFiles).toBe("function");
   });
-// describe('getFilesMd', () => {
-//   it('Debe extraer el contenido de un archivo y devolverlo como un string', () => {
-//     const cwd = process.cwd();
-//     const filePath = path.join(cwd, "src\\prueba\\four.md");
-//     const result = getFilesMd(filePath);
-//     expect(result).toEqual(
-//     ['C:\\DEV005-md-links\\src\\prueba\\four.md' ]);
-//   });
+
   it('Debe devolver un array con el contenido de la carpeta', () => {
     const filePath = 'src/prueba'; 
     const result = getFiles(filePath);
@@ -30,30 +23,32 @@ describe('readAllMds', () => {
   it('Debería ser una función', () => {
     expect(typeof readAllMds).toBe('function');
   });
-  //Deberia ser asincrona
-  // it('Deberia retornar un array de links', () => {
-  //   const arrayFiles = ['C:\Users\famil\DEV005-md-links\src\prueba\prueba.md', 'C:\Users\famil\DEV005-md-links\src\prueba\pruebita\pruebita.md', 'C:\Users\famil\DEV005-md-links\src\prueba\pruebita\lapruebadelapruebita\lapruebadelapruebita.md'];
+  it('Deberia retornar un array de links', () => {
+    const arrayFiles = ['C:\\Users\\famil\\DEV005-md-links\\src\\prueba\\prueba.md',];
 
-  //   return readAllMds(arrayFiles).then((result) => {
+    return readAllMds(arrayFiles).then((result) => {
 
-  //     expect(result).toEqual([
-  //       {
-  //         href: 'https://nodejs.org/es/',
-  //         text: 'Node.js',
-  //         file: 'C:\\Users\\famil\\DEV005-md-links\\src\\prueba\\prueba.md'
-  //       },
-  //       {
-  //         href: 'https://jestjs.io/',
-  //         text: 'Jest',
-  //         file: 'C:\\Users\\famil\\DEV005-md-links\\src\\prueba\\pruebita\\lapruebadelapruebita\\lapruebadelapruebita.md'  
-  //       },
-  //       {
-  //         href: 'https://mascoteando-andrenavas.vercel.app/error',
-  //         text: 'Mascoteando',
-  //         file: 'C:\\Users\\famil\\DEV005-md-links\\src\\prueba\\pruebita\\pruebita.md'
-  //       }
-  //     ])
-  //   });
+      expect(result).toEqual([[
+        {
+          href: 'https://nodejs.org/es/',
+          text: 'Node.js',
+          file: 'C:\\Users\\famil\\DEV005-md-links\\src\\prueba\\prueba.md'
+        },
+      ]])
+    });
+  });
+});
+
+  //Función readFiles
+  describe('readFile', () => {
+    it('Deberia ser una función', () => {
+      expect( typeof readFile).toBe('function');
+    })
+  // a esta le aplque lo mismo que arriba la de mdlink que devuelva promesa
+    it("Deberia resolver la promesa ,cuando al leer el archivo es exitoso", ()=>{
+      const filePath = "src/prueba/prueba.md";
+      expect(readFile(filePath)).toBeInstanceOf(Promise);   
+    });
   });
 
   // Funcion validate

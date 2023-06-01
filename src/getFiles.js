@@ -30,10 +30,8 @@ const mdToHtml = (data) => {
     headerIds: false,
     mangle: false,
   });
-
   const dom = new JSDOM(htmlContent);
   const links = dom.window.document.querySelectorAll('a');  // Salida: Links
-  // console.log(links);
   return links;
 };
 
@@ -106,5 +104,5 @@ const stats = (arrayLinks) => {
 };
 
 module.exports = {
-  getFiles, readAllMds, validate, stats
+  getFiles, readAllMds, validate, stats, mdToHtml, readFile
 };
